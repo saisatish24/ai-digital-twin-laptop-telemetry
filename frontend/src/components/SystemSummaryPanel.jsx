@@ -1,13 +1,13 @@
+
 import { useEffect, useState } from "react";
-
 import api from "../services/api";
-
 import "../styles/SystemSummaryPanel.css";
 
 function SystemSummaryPanel() {
 
-    const [summary, setSummary] =
-        useState(null);
+    const [summary, setSummary] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
     useEffect(() => {
 
@@ -24,9 +24,19 @@ function SystemSummaryPanel() {
                     response.data
                 );
 
+                setError("");
+
             } catch (error) {
 
                 console.error(error);
+
+                setError(
+                    "Waiting for summary service..."
+                );
+
+            } finally {
+
+                setLoading(false);
 
             }
 
@@ -36,9 +46,23 @@ function SystemSummaryPanel() {
 
     }, []);
 
-    if (!summary) {
+    if (loading) {
 
-        return <p>Loading...</p>;
+        return (
+            <div className="summary-container">
+                <p>Loading system summary...</p>
+            </div>
+        );
+
+    }
+
+    if (error) {
+
+        return (
+            <div className="summary-container">
+                <p>{error}</p>
+            </div>
+        );
 
     }
 
@@ -53,63 +77,37 @@ function SystemSummaryPanel() {
             <div className="summary-grid">
 
                 <div className="summary-card">
-
-                    <h3>
-                        Avg Temperature
-                    </h3>
-
-                    <p>
-                        {summary.average_temperature_c}°C
-                    </p>
-
+                    <h3>Avg Temperature</h3>
+                    <p>{summary.average_temperature_c}°C</p>
                 </div>
 
                 <div className="summary-card">
-
-                    <h3>
-                        Max Temperature
-                    </h3>
-
-                    <p>
+                    <h3>Max Temperature</h3>
+                    <p
+                        style={{
+                            color:
+                                summary.maximum_temperature_c > 80
+                                    ? "#ef4444"
+                                    : "#22c55e"
+                        }}
+                    >
                         {summary.maximum_temperature_c}°C
                     </p>
-
                 </div>
 
                 <div className="summary-card">
-
-                    <h3>
-                        Avg CPU Load
-                    </h3>
-
-                    <p>
-                        {summary.average_cpu_load_pct}%
-                    </p>
-
+                    <h3>Avg CPU Load</h3>
+                    <p>{summary.average_cpu_load_pct}%</p>
                 </div>
 
                 <div className="summary-card">
-
-                    <h3>
-                        Warning Events
-                    </h3>
-
-                    <p>
-                        {summary.warning_events}
-                    </p>
-
+                    <h3>Warning Events</h3>
+                    <p>{summary.warning_events}</p>
                 </div>
 
                 <div className="summary-card">
-
-                    <h3>
-                        Throttling Events
-                    </h3>
-
-                    <p>
-                        {summary.throttling_events}
-                    </p>
-
+                    <h3>Throttling Events</h3>
+                    <p>{summary.throttling_events}</p>
                 </div>
 
             </div>
@@ -121,3 +119,4 @@ function SystemSummaryPanel() {
 }
 
 export default SystemSummaryPanel;
+

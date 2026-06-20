@@ -1,7 +1,7 @@
+
 import { useState } from "react";
 
 import api from "../services/api";
-
 import "../styles/SimulationPanel.css";
 
 import {
@@ -16,23 +16,33 @@ import {
 
 function SimulationPanel() {
 
-    const [result, setResult] =
-        useState(null);
+    const [result, setResult] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
 
     async function runSimulation(endpoint) {
+
+        setLoading(true);
+        setError("");
 
         try {
 
             const response =
                 await api.get(endpoint);
 
-            setResult(
-                response.data
-            );
+            setResult(response.data);
 
         } catch (error) {
 
             console.error(error);
+
+            setError(
+                "Simulation service unavailable."
+            );
+
+        } finally {
+
+            setLoading(false);
 
         }
 
@@ -49,6 +59,7 @@ function SimulationPanel() {
             <div className="simulation-buttons">
 
                 <button
+                    disabled={loading}
                     onClick={() =>
                         runSimulation(
                             "/simulations/fan-failure"
@@ -59,6 +70,7 @@ function SimulationPanel() {
                 </button>
 
                 <button
+                    disabled={loading}
                     onClick={() =>
                         runSimulation(
                             "/simulations/desert-heat"
@@ -69,6 +81,7 @@ function SimulationPanel() {
                 </button>
 
                 <button
+                    disabled={loading}
                     onClick={() =>
                         runSimulation(
                             "/simulations/heavy-compile"
@@ -79,6 +92,18 @@ function SimulationPanel() {
                 </button>
 
             </div>
+
+            {loading && (
+                <p>
+                    Running simulation...
+                </p>
+            )}
+
+            {error && (
+                <p>
+                    {error}
+                </p>
+            )}
 
             {result && (
 
@@ -99,9 +124,18 @@ function SimulationPanel() {
 
                         <div className="simulation-metric">
                             <span>Risk</span>
-                            <strong>
+
+                            <strong
+                                style={{
+                                    color:
+                                        result.risk === "HIGH"
+                                            ? "#ef4444"
+                                            : "#22c55e"
+                                }}
+                            >
                                 {result.risk}
                             </strong>
+
                         </div>
 
                         <div className="simulation-metric">
@@ -160,3 +194,4 @@ function SimulationPanel() {
 }
 
 export default SimulationPanel;
+

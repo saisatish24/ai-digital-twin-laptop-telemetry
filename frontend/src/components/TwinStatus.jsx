@@ -1,30 +1,36 @@
+
 import { useState } from "react";
-
 import api from "../services/api";
-
 import "../styles/TwinStatus.css";
-
 import useAutoRefresh from "../utils/autoRefresh";
 
 function TwinStatus() {
 
     const [telemetry, setTelemetry] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
     async function loadTelemetry() {
-
 
         try {
 
             const response =
                 await api.get("/telemetry/latest");
 
-            setTelemetry(
-                response.data
-            );
+            setTelemetry(response.data);
+            setError("");
 
         } catch (error) {
 
             console.error(error);
+
+            setError(
+                "Waiting for telemetry service..."
+            );
+
+        } finally {
+
+            setLoading(false);
 
         }
 
@@ -35,11 +41,28 @@ function TwinStatus() {
         5000
     );
 
-    if (!telemetry) {
+    
+if (loading) {
 
-        return <p>Loading...</p>;
+    return (
+        <div className="status-loading">
+            Loading system status...
+        </div>
+    );
 
-    }
+}
+
+if (error) {
+
+    return (
+        <div className="status-error">
+            Waiting for telemetry service...
+        </div>
+    );
+
+}
+
+
 
     return (
 
@@ -53,7 +76,14 @@ function TwinStatus() {
 
                 <div className="status-card">
                     <h3>CPU Temp</h3>
-                    <p>
+                    <p
+                        style={{
+                            color:
+                                telemetry.cpu_temperature_c > 80
+                                    ? "#ef4444"
+                                    : "#22c55e"
+                        }}
+                    >
                         {telemetry.cpu_temperature_c}°C
                     </p>
                 </div>
@@ -84,7 +114,8 @@ function TwinStatus() {
 
                     <p
                         className={
-                            telemetry.thermal_state.toLowerCase()
+                            telemetry.thermal_state
+                                .toLowerCase()
                         }
                     >
                         {telemetry.thermal_state}
@@ -101,3 +132,4 @@ function TwinStatus() {
 }
 
 export default TwinStatus;
+

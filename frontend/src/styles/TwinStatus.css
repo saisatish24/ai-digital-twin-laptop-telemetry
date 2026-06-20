@@ -85,3 +85,24 @@
     }
 
 }
+
+
+.status-container p {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 1rem;
+    margin: 10px 0;
+}
+
+.status-loading,
+.status-error {
+    text-align: center;
+    padding: 20px;
+    color: #94a3b8;
+    font-size: 1rem;
+}
+
+.status-error {
+    color: #f59e0b;
+}
+
