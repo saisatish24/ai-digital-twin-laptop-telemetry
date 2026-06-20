@@ -1,36 +1,38 @@
+# Telemetry Schema Documentation
+
 # AI Digital Twin for Laptop Telemetry
 
-## Telemetry Schema Documentation
+## Overview
 
-### Overview
+The Digital Twin uses synthetic but relationship-driven telemetry to model laptop behavior.
 
-This document defines the telemetry schema used by the AI Digital Twin platform. The telemetry dataset represents the operational state of a laptop over time and serves as the foundation for:
+Unlike simple random value generation, the telemetry engine creates correlated system metrics that mimic realistic hardware behavior.
 
-* Digital Twin State Construction
-* Predictive Analytics
-* Anomaly Detection
-* What-If Simulations
-* Explainable AI Diagnostics
-
-Each telemetry record corresponds to a snapshot of the system at a specific timestamp.
+This document describes the telemetry schema used throughout the platform.
 
 ---
 
-# Sample Telemetry Record
+# Telemetry Record Structure
+
+Each telemetry record represents a snapshot of the laptop state.
+
+Example:
 
 ```json
 {
-  "timestamp": "2026-06-18T10:15:00Z",
-  "cpu_utilization_pct": 42,
-  "cpu_temperature_c": 58,
-  "gpu_temperature_c": 55,
-  "memory_utilization_pct": 63,
-  "fan_speed_rpm": 1600,
-  "battery_drain_w": 6.8,
-  "battery_health_pct": 96.5,
-  "disk_health_pct": 98.9,
-  "wifi_signal_dbm": -45,
-  "power_mode": "Balanced"
+  "timestamp": "2026-06-20T10:00:00Z",
+  "cpu_utilization_pct": 33,
+  "cpu_temperature_c": 64,
+  "gpu_temperature_c": 58,
+  "memory_utilization_pct": 49,
+  "fan_speed_rpm": 2100,
+  "battery_drain_w": 8.5,
+  "battery_health_pct": 96.23,
+  "disk_health_pct": 98.5,
+  "wifi_signal_dbm": -58,
+  "cpu_frequency_ghz": 2.8,
+  "power_mode": "BALANCED",
+  "thermal_state": "NORMAL"
 }
 ```
 
@@ -38,532 +40,510 @@ Each telemetry record corresponds to a snapshot of the system at a specific time
 
 # Field Definitions
 
-## 1. timestamp
+## timestamp
+
+### Type
+
+```text
+String (ISO 8601)
+```
 
 ### Description
 
-Timestamp indicating when the telemetry snapshot was captured.
-
-### Data Type
-
-String (ISO 8601)
+Timestamp of telemetry collection.
 
 ### Example
 
-```json
-"2026-06-18T10:15:00Z"
+```text
+2026-06-20T10:00:00Z
 ```
-
-### Usage
-
-* Time-series analysis
-* Trend detection
-* Forecasting
-* Visualization
 
 ---
 
-## 2. cpu_utilization_pct
+# CPU Metrics
 
-### Description
+## cpu_utilization_pct
 
-Percentage of CPU resources currently in use.
+### Type
 
-### Data Type
-
+```text
 Number
-
-### Unit
-
-Percent (%)
+```
 
 ### Range
 
+```text
 0 - 100
+```
+
+### Description
+
+Percentage of CPU utilization.
 
 ### Example
 
-```json
-42
+```text
+33
 ```
-
-### Dependencies
-
-Affected by:
-
-* User workload
-* Application execution
-* Background processes
-
-### Used In
-
-* Power estimation
-* Thermal modeling
-* Performance analysis
-* Thermal throttling simulation
 
 ---
 
-## 3. cpu_temperature_c
+## cpu_temperature_c
+
+### Type
+
+```text
+Number
+```
+
+### Unit
+
+```text
+°C
+```
 
 ### Description
 
 Current CPU temperature.
 
-### Data Type
-
-Number
-
-### Unit
-
-Degrees Celsius (°C)
-
-### Typical Range
-
-35°C - 95°C
-
 ### Example
 
-```json
-58
+```text
+64
 ```
 
-### Dependencies
+### Relationship
 
-Affected by:
-
-* CPU utilization
-* Power consumption
-* Fan speed
-* Ambient temperature
-
-### Mathematical Model
-
-Newton's Law of Cooling
+Higher CPU utilization increases power consumption and temperature.
 
 ```text
-T_new = T_current + (T_equilibrium - T_current) × Thermal_Inertia
+CPU Load ↑
+→ CPU Temperature ↑
 ```
-
-### Used In
-
-* Thermal forecasting
-* Fan control
-* Thermal throttling
-* Anomaly detection
 
 ---
 
-## 4. gpu_temperature_c
+## cpu_frequency_ghz
+
+### Type
+
+```text
+Number
+```
+
+### Unit
+
+```text
+GHz
+```
+
+### Description
+
+Current operating frequency of the CPU.
+
+### Example
+
+```text
+2.8
+```
+
+### Relationship
+
+Higher CPU load typically results in higher CPU frequency.
+
+---
+
+# GPU Metrics
+
+## gpu_temperature_c
+
+### Type
+
+```text
+Number
+```
+
+### Unit
+
+```text
+°C
+```
 
 ### Description
 
 Current GPU temperature.
 
-### Data Type
-
-Number
-
-### Unit
-
-Degrees Celsius (°C)
-
-### Typical Range
-
-35°C - 90°C
-
 ### Example
 
-```json
-55
+```text
+58
 ```
 
-### Dependencies
+### Relationship
 
-Affected by:
-
-* Graphics workloads
-* GPU utilization
-* Ambient temperature
-
-### Used In
-
-* Thermal health monitoring
-* Future GPU simulations
+Gaming and graphics-intensive workloads increase GPU temperature.
 
 ---
 
-## 5. memory_utilization_pct
+# Memory Metrics
 
-### Description
+## memory_utilization_pct
 
-Percentage of RAM currently in use.
+### Type
 
-### Data Type
-
+```text
 Number
-
-### Unit
-
-Percent (%)
+```
 
 ### Range
 
+```text
 0 - 100
-
-### Example
-
-```json
-63
 ```
-
-### Dependencies
-
-Affected by:
-
-* Running applications
-* Browser tabs
-* Background services
-
-### Used In
-
-* Workload classification
-* Performance analysis
-
----
-
-## 6. fan_speed_rpm
 
 ### Description
 
-Current cooling fan rotational speed.
-
-### Data Type
-
-Number
-
-### Unit
-
-RPM (Revolutions Per Minute)
-
-### Typical Values
-
-```text
-1600 RPM (Low)
-4600 RPM (High)
-```
+Current memory usage percentage.
 
 ### Example
 
-```json
-1600
-```
-
-### Dependencies
-
-Affected by:
-
-* CPU temperature
-* Fan hysteresis logic
-
-### Hysteresis Logic
-
-Fan enters high-speed mode:
-
 ```text
-Temperature > 76°C
+49
 ```
-
-Fan exits high-speed mode:
-
-```text
-Temperature < 64°C
-```
-
-### Used In
-
-* Thermal regulation
-* Fan failure simulation
-* Cooling efficiency analysis
 
 ---
 
-## 7. battery_drain_w
+# Cooling Metrics
+
+## fan_speed_rpm
+
+### Type
+
+```text
+Number
+```
+
+### Unit
+
+```text
+RPM
+```
+
+### Description
+
+Current cooling fan speed.
+
+### Example
+
+```text
+2100
+```
+
+### Relationship
+
+Higher temperatures cause higher fan speeds.
+
+```text
+Temperature ↑
+→ Fan Speed ↑
+```
+
+---
+
+# Battery Metrics
+
+## battery_drain_w
+
+### Type
+
+```text
+Number
+```
+
+### Unit
+
+```text
+Watts
+```
 
 ### Description
 
 Current battery power consumption.
 
-### Data Type
-
-Number
-
-### Unit
-
-Watts (W)
-
 ### Example
-
-```json
-6.8
-```
-
-### Dependencies
-
-Affected by:
-
-* CPU utilization
-* DVFS behavior
-* System workload
-
-### Mathematical Model
-
-Dynamic Voltage and Frequency Scaling (DVFS)
 
 ```text
-Power = 4.5 + (Load / 18)^2.3
+8.5
 ```
 
-### Used In
+### Relationship
 
-* Battery analytics
-* Power forecasting
-* Energy efficiency analysis
-
----
-
-## 8. battery_health_pct
-
-### Description
-
-Estimated remaining battery health.
-
-### Data Type
-
-Number
-
-### Unit
-
-Percent (%)
-
-### Example
-
-```json
-96.5
-```
-
-### Dependencies
-
-Affected by:
-
-* Thermal stress
-* Charging cycles
-* Workload intensity
-
-### Degradation Rule
-
-When:
-
-```text
-Temperature > 80°C
-```
-
-Battery health gradually decreases.
-
-### Used In
-
-* Predictive maintenance
-* Remaining lifespan estimation
-
----
-
-## 9. disk_health_pct
-
-### Description
-
-Estimated SSD health.
-
-### Data Type
-
-Number
-
-### Unit
-
-Percent (%)
-
-### Example
-
-```json
-98.9
-```
-
-### Dependencies
-
-Affected by:
-
-* Thermal exposure
-* System wear
-* Long-term operation
-
-### Used In
-
-* Storage health forecasting
-* Predictive maintenance
-
----
-
-## 10. wifi_signal_dbm
-
-### Description
-
-Wireless signal strength.
-
-### Data Type
-
-Number
-
-### Unit
-
-dBm
-
-### Example
-
-```json
--45
-```
-
-### Typical Range
-
-```text
--30 dBm = Excellent
--50 dBm = Strong
--70 dBm = Fair
--90 dBm = Weak
-```
-
-### Used In
-
-* Connectivity diagnostics
-* Network quality monitoring
-
----
-
-## 11. power_mode
-
-### Description
-
-Current system power profile.
-
-### Data Type
-
-String
-
-### Possible Values
-
-```text
-Power Saver
-Balanced
-Performance
-```
-
-### Example
-
-```json
-"Balanced"
-```
-
-### Used In
-
-* Workload simulation
-* Battery forecasting
-* Power analysis
-
----
-
-# Telemetry Relationships
-
-## CPU Load → Power Consumption
-
-Higher CPU utilization increases power draw.
+Higher workloads increase battery drain.
 
 ```text
 CPU Load ↑
-      ↓
-Battery Drain ↑
+→ Power Consumption ↑
+→ Battery Drain ↑
 ```
 
 ---
 
-## Power Consumption → Temperature
+## battery_health_pct
 
-Increased power consumption generates heat.
+### Type
 
 ```text
-Battery Drain ↑
-      ↓
-CPU Temperature ↑
+Number
 ```
 
----
-
-## Temperature → Fan Speed
-
-High temperatures trigger cooling mechanisms.
+### Range
 
 ```text
-CPU Temperature ↑
-      ↓
-Fan Speed ↑
+0 - 100
 ```
 
----
+### Description
 
-## Temperature → Component Health
+Estimated battery health.
 
-Sustained thermal stress accelerates wear.
+### Example
 
 ```text
-CPU Temperature ↑
-      ↓
-Battery Health ↓
-Disk Health ↓
+96.23
 ```
 
----
+### Relationship
 
-## Temperature → Thermal Throttling
-
-Critical temperatures reduce performance.
+Repeated heat stress gradually degrades battery health.
 
 ```text
-Temperature > 92°C
-      ↓
-CPU Throttling
-      ↓
-Performance Reduction
+Heat Stress ↑
+→ Battery Wear ↑
+→ Battery Health ↓
 ```
 
 ---
 
-# Future Digital Twin Features
+# Storage Metrics
 
-The telemetry schema supports future extensions:
+## disk_health_pct
 
-* GPU utilization
-* Battery charge cycles
-* Process-level monitoring
-* Real-time streaming telemetry
-* Failure prediction
-* Advanced simulation scenarios
+### Type
+
+```text
+Number
+```
+
+### Range
+
+```text
+0 - 100
+```
+
+### Description
+
+Estimated storage device health.
+
+### Example
+
+```text
+98.5
+```
+
+### Relationship
+
+Disk health decreases gradually over time.
+
+---
+
+# Connectivity Metrics
+
+## wifi_signal_dbm
+
+### Type
+
+```text
+Number
+```
+
+### Unit
+
+```text
+dBm
+```
+
+### Description
+
+WiFi signal strength.
+
+### Example
+
+```text
+-58
+```
+
+### Interpretation
+
+```text
+-30 dBm → Excellent
+-50 dBm → Very Good
+-70 dBm → Fair
+-85 dBm → Poor
+```
+
+---
+
+# Power Metrics
+
+## power_mode
+
+### Type
+
+```text
+String
+```
+
+### Values
+
+```text
+POWER_SAVER
+BALANCED
+PERFORMANCE
+```
+
+### Description
+
+Current power profile.
+
+---
+
+# Thermal Metrics
+
+## thermal_state
+
+### Type
+
+```text
+String
+```
+
+### Values
+
+```text
+NORMAL
+WARNING
+THROTTLING
+```
+
+### Description
+
+Current thermal condition of the system.
+
+---
+
+## NORMAL
+
+Temperature within safe operating range.
+
+---
+
+## WARNING
+
+Temperature approaching critical levels.
+
+---
+
+## THROTTLING
+
+System is actively reducing performance to prevent overheating.
+
+---
+
+# Relationship Model
+
+The Digital Twin uses relationship-driven telemetry generation.
+
+Example dependency chain:
+
+```text
+Session Type
+        ↓
+CPU Load
+        ↓
+Power Consumption
+        ↓
+CPU Temperature
+        ↓
+Fan Speed
+        ↓
+Battery Drain
+        ↓
+Battery Health
+```
+
+This creates realistic system behavior and enables meaningful anomaly detection, prediction, and simulation.
+
+---
+
+# Example Workload Profiles
+
+## Idle Session
+
+```text
+CPU Load: 10%
+CPU Temp: 45°C
+Fan Speed: 1200 RPM
+Battery Drain: Low
+```
+
+---
+
+## Office Work
+
+```text
+CPU Load: 30%
+CPU Temp: 60°C
+Fan Speed: 1800 RPM
+Battery Drain: Moderate
+```
+
+---
+
+## Gaming Session
+
+```text
+CPU Load: 90%
+CPU Temp: 88°C
+Fan Speed: 4200 RPM
+Battery Drain: High
+```
+
+---
+
+# Why This Schema Matters
+
+The telemetry schema serves as the foundation of the Digital Twin.
+
+All major system components depend on telemetry:
+
+```text
+Telemetry
+     ↓
+Anomaly Detection
+     ↓
+Predictions
+     ↓
+Simulations
+     ↓
+AI Assistant
+```
+
+Because the telemetry is relationship-based rather than random, the platform can generate realistic diagnostics, predictions, and simulation outcomes.
 
 ---
 
 # Conclusion
 
-This telemetry schema provides the foundation for building a realistic AI-powered Digital Twin capable of:
+The telemetry schema defines a realistic virtual representation of laptop behavior through correlated system metrics.
 
-* Monitoring laptop health
-* Predicting future behavior
-* Detecting anomalies
-* Running simulations
-* Providing explainable diagnostics using AI
+By modeling relationships between CPU load, power consumption, temperature, cooling behavior, battery wear, and system health, the Digital Twin provides a strong foundation for predictive analytics, simulation, and explainable AI reasoning.
