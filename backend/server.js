@@ -9,7 +9,7 @@ const simulationRoutes = require("./routes/simulation");
 const predictionRoutes = require("./routes/prediction");
 const anomalyRoutes = require("./routes/anomaly");
 
-// const chatRoutes = require("./routes/chat");
+const chatRoutes = require("./routes/chat");
 
 const app = express();
 
@@ -28,7 +28,11 @@ app.use("/api/simulations", simulationRoutes);
 app.use("/api/predictions", predictionRoutes);
 app.use("/api/anomalies", anomalyRoutes);
 
-// app.use("/api/chat", chatRoutes);
+app.use("/api/chat", chatRoutes);
+
+app.get("/", (req, res) => {
+    res.send("Backend is alive");
+});
 
 const PORT = process.env.PORT || 5000;
 

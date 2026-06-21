@@ -89,25 +89,55 @@ if (error) {
                 </div>
 
                 <div className="status-card">
-                    <h3>CPU Load</h3>
-                    <p>
-                        {telemetry.cpu_utilization_pct}%
-                    </p>
-                </div>
+    <h3>CPU Load</h3>
+
+    <p
+        style={{
+            color:
+                telemetry.cpu_utilization_pct >= 80
+                    ? "#ef4444"
+                    : telemetry.cpu_utilization_pct >= 30
+                    ? "#f59e0b"
+                    : "#22c55e"
+        }}
+    >
+        {telemetry.cpu_utilization_pct}%
+    </p>
+</div>
 
                 <div className="status-card">
-                    <h3>Battery</h3>
-                    <p>
-                        {telemetry.battery_health_pct}%
-                    </p>
-                </div>
+    <h3>Battery</h3>
+
+    <p
+        style={{
+            color:
+                telemetry.battery_health_pct >= 95
+                    ? "#22c55e"
+                    : telemetry.battery_health_pct >= 90
+                    ? "#f59e0b"
+                    : "#ef4444"
+        }}
+    >
+        {telemetry.battery_health_pct}%
+    </p>
+</div>
 
                 <div className="status-card">
-                    <h3>Disk</h3>
-                    <p>
-                        {telemetry.disk_health_pct}%
-                    </p>
-                </div>
+    <h3>Disk</h3>
+
+    <p
+        style={{
+            color:
+                telemetry.disk_health_pct >= 95
+                    ? "#22c55e"
+                    : telemetry.disk_health_pct >= 85
+                    ? "#f59e0b"
+                    : "#ef4444"
+        }}
+    >
+        {telemetry.disk_health_pct}%
+    </p>
+</div>
 
                 <div className="status-card">
                     <h3>Thermal</h3>

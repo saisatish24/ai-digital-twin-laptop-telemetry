@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import "../styles/SystemSummaryPanel.css";
@@ -19,6 +18,7 @@ function SystemSummaryPanel() {
                     await api.get(
                         "/telemetry/summary"
                     );
+                    console.log(response.data);
 
                 setSummary(
                     response.data
@@ -78,36 +78,92 @@ function SystemSummaryPanel() {
 
                 <div className="summary-card">
                     <h3>Avg Temperature</h3>
-                    <p>{summary.average_temperature_c}°C</p>
+
+                    <p
+                        style={{
+                            color:
+                                summary.average_temperature_c >= 80
+                                    ? "#ef4444"
+                                    : summary.average_temperature_c >= 60
+                                    ? "#f59e0b"
+                                    : "#22c55e"
+                        }}
+                    >
+                        {summary.average_temperature_c}°C
+                    </p>
+
                 </div>
 
                 <div className="summary-card">
                     <h3>Max Temperature</h3>
+
                     <p
                         style={{
                             color:
-                                summary.maximum_temperature_c > 80
+                                summary.maximum_temperature_c >= 80
                                     ? "#ef4444"
+                                    : summary.maximum_temperature_c >= 60
+                                    ? "#f59e0b"
                                     : "#22c55e"
                         }}
                     >
                         {summary.maximum_temperature_c}°C
                     </p>
+
                 </div>
 
                 <div className="summary-card">
                     <h3>Avg CPU Load</h3>
-                    <p>{summary.average_cpu_load_pct}%</p>
+
+                    <p
+                        style={{
+                            color:
+                                summary.average_cpu_load_pct >= 80
+                                    ? "#ef4444"
+                                    : summary.average_cpu_load_pct >= 50
+                                    ? "#f59e0b"
+                                    : "#22c55e"
+                        }}
+                    >
+                        {summary.average_cpu_load_pct}%
+                    </p>
+
                 </div>
 
                 <div className="summary-card">
                     <h3>Warning Events</h3>
-                    <p>{summary.warning_events}</p>
+
+                    <p
+                        style={{
+                            color:
+                                summary.warning_events > 5
+                                    ? "#ef4444"
+                                    : summary.warning_events > 0
+                                    ? "#f59e0b"
+                                    : "#22c55e"
+                        }}
+                    >
+                        {summary.warning_events}
+                    </p>
+
                 </div>
 
                 <div className="summary-card">
                     <h3>Throttling Events</h3>
-                    <p>{summary.throttling_events}</p>
+
+                    <p
+                        style={{
+                            color:
+                                summary.throttling_events > 5
+                                    ? "#ef4444"
+                                    : summary.throttling_events > 0
+                                    ? "#f59e0b"
+                                    : "#22c55e"
+                        }}
+                    >
+                        {summary.throttling_events}
+                    </p>
+
                 </div>
 
             </div>
@@ -119,4 +175,3 @@ function SystemSummaryPanel() {
 }
 
 export default SystemSummaryPanel;
-

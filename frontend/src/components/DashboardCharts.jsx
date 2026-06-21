@@ -72,9 +72,9 @@ function DashboardCharts() {
 
             <div
                 style={{
-                    width: "90%",
-                    margin: "40px auto"
-                }}
+                    width: "100%",
+                    margin: "0"
+        }}
             >
 
                 <h2>

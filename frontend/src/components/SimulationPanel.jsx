@@ -113,39 +113,65 @@ function SimulationPanel() {
                         {result.scenario}
                     </h3>
 
-                    <div className="simulation-summary">
+                   <div className="simulation-summary">
 
-                        <div className="simulation-metric">
-                            <span>Temperature</span>
-                            <strong>
-                                {result.predicted_temperature_c}°C
-                            </strong>
-                        </div>
+    <div className="simulation-metric">
+        <span>Temperature</span>
 
-                        <div className="simulation-metric">
-                            <span>Risk</span>
+        <strong
+            style={{
+                color:
+                    result.predicted_temperature_c >= 90
+                        ? "#ef4444"
+                        : result.predicted_temperature_c >= 75
+                        ? "#f59e0b"
+                        : "#22c55e"
+            }}
+        >
+            {result.predicted_temperature_c}°C
+        </strong>
 
-                            <strong
-                                style={{
-                                    color:
-                                        result.risk === "HIGH"
-                                            ? "#ef4444"
-                                            : "#22c55e"
-                                }}
-                            >
-                                {result.risk}
-                            </strong>
+    </div>
 
-                        </div>
+    <div className="simulation-metric">
 
-                        <div className="simulation-metric">
-                            <span>Thermal State</span>
-                            <strong>
-                                {result.thermal_state}
-                            </strong>
-                        </div>
+        <span>Risk</span>
 
-                    </div>
+        <strong
+            style={{
+                color:
+                    result.risk === "HIGH"
+                        ? "#ef4444"
+                        : result.risk === "MEDIUM"
+                        ? "#f59e0b"
+                        : "#22c55e"
+            }}
+        >
+            {result.risk}
+        </strong>
+
+    </div>
+
+    <div className="simulation-metric">
+
+        <span>Thermal State</span>
+
+        <strong
+            style={{
+                color:
+                    result.thermal_state === "THROTTLING"
+                        ? "#ef4444"
+                        : result.thermal_state === "WARNING"
+                        ? "#f59e0b"
+                        : "#22c55e"
+            }}
+        >
+            {result.thermal_state}
+        </strong>
+
+    </div>
+
+</div>
 
                     <h4>
                         Predicted Temperature Timeline
